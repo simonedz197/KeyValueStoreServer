@@ -103,7 +103,6 @@ func TestUpdateAndFetchReadAndWrites(t *testing.T) {
 
 func TestCheckDelete(t *testing.T) {
 	t.Run("Delete", func(t *testing.T) {
-
 		// now attempt to delete a key we do not own - not admin
 		response := <-store.PublicAccess.Delete("key6", "user1")
 		if response == nil {
@@ -180,5 +179,4 @@ func TestListKey(t *testing.T) {
 	})
 
 	store.Done <- store.DoneRequest{}
-
 }
