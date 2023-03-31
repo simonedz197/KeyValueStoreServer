@@ -12,6 +12,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// Admin = admin.
 const Admin = "admin"
 
 type claims struct {
@@ -22,7 +23,6 @@ type claims struct {
 var jwtKey = []byte("ebd4eca7-a114-478b-a12d-617d3a9d91e0")
 
 func getUsername(r *http.Request) string {
-
 	username, ok := authenticateUserFromToken(r)
 	if !ok {
 		username = ""

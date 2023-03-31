@@ -17,8 +17,8 @@ const timeout = time.Second * 3
 
 func main() {
 	// fire up the loggers
-	go log.WaitForAndProcessRequestLogs("")
-	go log.WaitForAndProcesslogs("")
+	go log.WaitForAndProcessRequestLogs()
+	go log.WaitForAndProcesslogs()
 
 	port, depth := getcmdLine()
 
