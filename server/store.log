@@ -4272,3 +4272,8 @@ ERROR: 2023/03/31 10:23:43 loggers.go:63: Unauthorised access attempt for user u
 ERROR: 2023/03/31 10:23:43 loggers.go:63: Unauthorised access attempt for user invalid
 WARNING: 2023/03/31 10:23:44 loggers.go:63: Attempt to shutdown without supplying authorisation
 INFO: 2023/03/31 10:23:44 loggers.go:63: Shutting Down Server
+INFO: 2023/03/31 12:43:21 loggers.go:73: Starting Server on 8000
+ERROR: 2023/03/31 12:43:33 loggers.go:73: Unauthorised access attempt for user user_a
+ERROR: 2023/03/31 12:43:33 loggers.go:73: Unauthorised access attempt for user invalid
+WARNING: 2023/03/31 12:43:33 loggers.go:73: Attempt to shutdown without supplying authorisation
+INFO: 2023/03/31 12:43:33 loggers.go:73: Shutting Down Server

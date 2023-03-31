@@ -92,7 +92,7 @@ func servePut(writer http.ResponseWriter, value string, key string, owner string
 	if response != nil {
 		if val, ok := response.(error); ok {
 			switch {
-			case errors.Is(val, store.Forbidden):
+			case errors.Is(val, store.ErrForbidden):
 				writer.WriteHeader(http.StatusForbidden)
 				_, _ = writer.Write([]byte("Forbidden"))
 			default:
@@ -135,10 +135,10 @@ func serveDelete(writer http.ResponseWriter, key string, owner string) {
 	if response != nil {
 		if val, ok := response.(error); ok {
 			switch {
-			case errors.Is(val, store.Forbidden):
+			case errors.Is(val, store.ErrForbidden):
 				writer.WriteHeader(http.StatusForbidden)
 				_, _ = writer.Write([]byte("Forbidden"))
-			case errors.Is(val, store.NotFound):
+			case errors.Is(val, store.ErrNotFound):
 				writer.WriteHeader(http.StatusNotFound)
 				_, _ = writer.Write([]byte("404 key not found"))
 

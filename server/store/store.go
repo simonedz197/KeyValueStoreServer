@@ -6,8 +6,11 @@ import (
 	"time"
 )
 
-var NotFound = errors.New("key not found")
-var Forbidden = errors.New("Forbidden")
+// ErrNotFounf is Key Not Found
+var ErrNotFound = errors.New("key not found")
+
+// ErrForbidden is no access to key
+var ErrForbidden = errors.New("Forbidden")
 
 const admin = "admin"
 
@@ -200,10 +203,10 @@ func transactionDelete(msg DeleteRequest) {
 			delete(internalStore, msg.Key)
 			msg.Response <- nil
 		} else {
-			msg.Response <- Forbidden
+			msg.Response <- ErrForbidden
 		}
 	} else {
-		msg.Response <- NotFound
+		msg.Response <- ErrNotFound
 	}
 }
 
@@ -213,7 +216,7 @@ func transactionUpsert(msg UpsertRequest) {
 	if current, ok := internalStore[msg.Key]; ok {
 		// trying to update
 		if msg.Owner != current.Owner && msg.Owner != admin {
-			msg.Response <- Forbidden
+			msg.Response <- ErrForbidden
 		} else {
 			internalStore[msg.Key] = DataValue{
 				Owner:     current.Owner,
