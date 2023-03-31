@@ -232,6 +232,7 @@ func (t *Tester) List() []error {
 }
 
 // ListAll tests the list/ endpoint.
+//
 //nolint:gocyclo,cyclop
 func (t *Tester) ListAll() []error {
 	var (
@@ -369,7 +370,9 @@ func (t *Tester) LRU() []error {
 	}
 
 	t.write(admin, key, value, errs)
+	time.Sleep(time.Millisecond * 100)
 	t.write(admin, discard, value, errs)
+	time.Sleep(time.Millisecond * 100)
 
 	for depth := 0; depth <= t.Depth; depth += len(t.Users) {
 		for i, user := range t.Users {

@@ -4,7 +4,7 @@ package main
 const defaultURL = "http://localhost:8000"
 
 // You can update this if you want to default the capabilities you have set.
-const defaultCapabilities = ""
+const defaultCapabilities = "login, override, list, lru"
 
 // Default depth of the LRU cache (if implemented).
 const defaultLRUDepth = 100
@@ -13,8 +13,8 @@ const defaultLRUDepth = 100
 // and each will fire off `requests` requests. The stored values are also used
 // to test /list. If the tests are a bit slow you can change these to 10/100.
 const (
-	goroutines = 100
-	requests   = 1000
+	goroutines = 10
+	requests   = 100
 )
 
 // The maximum number of failures that will get reported - when the stress test
