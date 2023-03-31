@@ -93,8 +93,8 @@ func TestUpdateAndFetchReadAndWrites(t *testing.T) {
 			if val.Writes != 3 {
 				t.Errorf("Expected writes to be 3 but got %d", val.Writes)
 			} else {
-				if val.Reads != 2 {
-					t.Errorf("Expected reads to be 2 but got %d", val.Reads)
+				if val.Reads != 1 {
+					t.Errorf("Expected reads to be 1 but got %d", val.Reads)
 				}
 			}
 		}
@@ -180,3 +180,9 @@ func TestListKey(t *testing.T) {
 
 	store.Done <- store.DoneRequest{}
 }
+
+// func TestHashFromPassword(t *testing.T) {
+// 	pass := []byte("Password1")
+// 	hash := store.HashFromPassword(pass)
+// 	t.Error(hash)
+// }

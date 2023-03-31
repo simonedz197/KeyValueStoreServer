@@ -4,6 +4,8 @@ package store
 import (
 	"errors"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // ErrNotFounf is Key Not Found
@@ -18,10 +20,10 @@ const admin = "admin"
 var StoreDepth = 100
 
 var userList = map[string]string{
-	"user_a": "passwordA",
-	"user_b": "passwordB",
-	"user_c": "passwordC",
-	admin:    "Password1",
+	"user_a": "$2a$10$tHRy2eY8a5oOjbHPnZ52X.ME5rX5L9DgoGT8cK7s8jImrv2GMqZXy",
+	"user_b": "$2a$10$A0lv9mPC50j5u/r/KbtTAOkXRP8BbpioXz9ef1xGg2dtaOk5Kmo9u",
+	"user_c": "$2a$10$yjAy3NgsP2KJ3yk.cAwOjOtK7P4V2jHlNfkoA3bCvp6pvdYBl52Vu",
+	admin:    "$2a$10$qkKN5QitJNEZKExOFFk7BeLFh.DV4asusJ51niFLWGeD7g/W6XJWC",
 }
 
 // DataValue struct stored in store.
@@ -319,9 +321,22 @@ func ValidateLogin(username, password string) bool {
 		return false
 	}
 
-	if value != password {
+	// create byte from password string
+	hash := []byte(value)
+	pwd := []byte(password)
+	compare := bcrypt.CompareHashAndPassword(hash, pwd)
+
+	if compare != nil {
 		return false
 	}
 
 	return true
 }
+
+// func HashFromPassword(password []byte) string {
+// 	hash, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	return string(hash)
+// }
