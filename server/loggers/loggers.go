@@ -15,8 +15,12 @@ var (
 	errorLog = log.New(nil, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 )
 
-var generalLogFile = "store.log"
-var requestLogFile = "access.log"
+const generalLogFile = "store.log"
+const requestLogFile = "access.log"
+const fileMode = 0600
+const osAppend = 8
+const osCreate = 512
+const osWronly = 1
 
 // RequestChannel for logging requests.
 var RequestChannel = make(chan *http.Request)
@@ -40,17 +44,23 @@ var LoggerDoneChannel = make(chan bool)
 func addRequestlog(r *http.Request) {
 	currentTime := time.Now().Format("2006-01-02 15:04:05.000")
 	message := fmt.Sprintf("Request received %s, %s, %s, %s", currentTime, r.Method, r.URL.Path, r.RemoteAddr)
-	writelog(infoLog, message, requestLogFile)
+
+	file, err := os.OpenFile(requestLogFile, osAppend|osCreate|osWronly, fileMode)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer func() {
+		_ = file.Close()
+	}()
+
+	infoLog.SetOutput(file)
+	infoLog.Println(message)
 }
 
 // AddLog general logs to store.log file.
 func addLog(logger *log.Logger, logEntry string) {
-	writelog(logger, logEntry, generalLogFile)
-}
-
-// writeLog writes logging information to the specfied file.
-func writelog(logger *log.Logger, logEntry, logFile string) {
-	file, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	file, err := os.OpenFile(generalLogFile, osAppend|osCreate|osWronly, fileMode)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,14 +74,8 @@ func writelog(logger *log.Logger, logEntry, logFile string) {
 }
 
 // WaitForAndProcesslogs waits on channels for general logs and writes to gerneral log file.
-// pass "" for logile to use default store.log or specify required
-func WaitForAndProcesslogs(logfile string) {
-	if logfile != "" {
-		generalLogFile = logfile
-	}
-
+func WaitForAndProcesslogs() {
 	loop := true
-
 	for loop {
 		select {
 		case i := <-InfoChannel:
@@ -97,14 +101,8 @@ func WaitForAndProcesslogs(logfile string) {
 }
 
 // WaitForAndProcessRequestLogs waits on channel for request logs and writes to request log file.
-// pass "" for logile to use default access.log or specify required
-func WaitForAndProcessRequestLogs(logfile string) {
-	if logfile != "" {
-		requestLogFile = logfile
-	}
-
+func WaitForAndProcessRequestLogs() {
 	loop := true
-
 	for loop {
 		select {
 		case r := <-RequestChannel:
